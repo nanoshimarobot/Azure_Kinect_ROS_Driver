@@ -59,7 +59,7 @@ def generate_launch_description():
         description="Enable or disable the depth camera"),
     DeclareLaunchArgument(
         'depth_mode',
-        default_value="WFOV_UNBINNED",
+        default_value="WFOV_2X2BINNED",
         description="Set the depth camera mode, which affects FOV, depth range, and camera resolution. See Azure Kinect documentation for full details. Valid options: NFOV_UNBINNED, NFOV_2X2BINNED, WFOV_UNBINNED, WFOV_2X2BINNED, and PASSIVE_IR"),
     DeclareLaunchArgument(
         'depth_unit',
@@ -75,11 +75,11 @@ def generate_launch_description():
         description="The format of RGB camera. Valid options: bgra, jpeg"),
     DeclareLaunchArgument(
         'color_resolution',
-        default_value="1536P",
+        default_value="1080P",
         description="Resolution at which to run the color camera. Valid options: 720P, 1080P, 1440P, 1536P, 2160P, 3072P"),
     DeclareLaunchArgument(
         'fps',
-        default_value="5",
+        default_value="15",
         description="FPS to run both cameras at. Valid options are 5, 15, and 30"),
     DeclareLaunchArgument(
         'point_cloud',
@@ -87,11 +87,11 @@ def generate_launch_description():
         description="Generate a point cloud from depth data. Requires depth_enabled"),
     DeclareLaunchArgument(
         'rgb_point_cloud',
-        default_value="true",
+        default_value="false",
         description="Colorize the point cloud using the RBG camera. Requires color_enabled and depth_enabled"),
     DeclareLaunchArgument(
         'point_cloud_in_depth_frame',
-        default_value="false",
+        default_value="true",
         description="Whether the RGB pointcloud is rendered in the depth frame (true) or RGB frame (false). Will either match the resolution of the depth camera (true) or the RGB camera (false)."),
     DeclareLaunchArgument( # Not a parameter of the node, rather a launch file parameter
         'required',
@@ -163,31 +163,31 @@ def generate_launch_description():
             {'wired_sync_mode': launch.substitutions.LaunchConfiguration('wired_sync_mode')},
             {'subordinate_delay_off_master_usec': launch.substitutions.LaunchConfiguration('subordinate_delay_off_master_usec')}]),
     # If flag overwrite_robot_description is set:
-    launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters = [{'robot_description' : urdf}],
-        condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
-    launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        arguments=[urdf_path],
-        condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     name='robot_state_publisher',
+    #     parameters = [{'robot_description' : urdf}],
+    #     condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher',
+    #     arguments=[urdf_path],
+    #     condition=conditions.IfCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
     # If flag overwrite_robot_description is not set:
-    launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters = [{'robot_description' : urdf}],
-        remappings=remappings,
-        condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
-    launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        arguments=[urdf_path],
-        remappings=remappings,
-        condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     name='robot_state_publisher',
+    #     parameters = [{'robot_description' : urdf}],
+    #     remappings=remappings,
+    #     condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
+    # launch_ros.actions.Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher',
+    #     arguments=[urdf_path],
+    #     remappings=remappings,
+    #     condition=conditions.UnlessCondition(launch.substitutions.LaunchConfiguration("overwrite_robot_description"))),
     ])
