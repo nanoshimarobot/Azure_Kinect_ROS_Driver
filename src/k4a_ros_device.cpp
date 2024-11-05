@@ -14,7 +14,7 @@
 // Library headers
 //
 #include <angles/angles.h>
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <k4a/k4a.h>
 #include <sensor_msgs/distortion_models.hpp>
 #include <sensor_msgs/image_encodings.hpp>
@@ -1197,7 +1197,7 @@ void K4AROSDevice::bodyPublisherThread()
       else
       {
         auto capture_time = timestampToROS(body_frame.get_device_timestamp());
-        
+
         if (this->count_subscribers("body_tracking_data") > 0)
         {
           // Joint marker array
